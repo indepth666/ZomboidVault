@@ -192,7 +192,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.settings = QSettings("PZSaveManager", "Simple")
+        self.settings = QSettings("ZomboidVault", "ZomboidVault")
         self.backup_manager = None
         self.tray_icon = None
         self.minimize_to_tray = self.settings.value("minimize_to_tray", False, bool)
@@ -561,14 +561,14 @@ class MainWindow(QMainWindow):
         tray_menu.addAction(quit_action)
 
         self.tray_icon.setContextMenu(tray_menu)
-        self.tray_icon.setToolTip("PZ Save Manager (window hides here when closed)")
+        self.tray_icon.setToolTip("ZomboidVault (window hides here when closed)")
         self.tray_icon.activated.connect(self._tray_icon_activated)
 
         self.tray_icon.show()
 
         # Show notification
         self.tray_icon.showMessage(
-            "PZ Save Manager",
+            "ZomboidVault",
             "The app keeps running in the background",
             QSystemTrayIcon.Information,
             2000
@@ -595,7 +595,7 @@ class MainWindow(QMainWindow):
             event.ignore()
             self.hide()
             self.tray_icon.showMessage(
-                "PZ Save Manager",
+                "ZomboidVault",
                 "The app keeps running in the background.\nUse 'Quit' in the menu to exit.",
                 QSystemTrayIcon.Information,
                 2000
@@ -1087,8 +1087,8 @@ def main():
     """Application entry point."""
     app = QApplication(sys.argv)
 
-    app.setApplicationName("PZSaveManager")
-    app.setOrganizationName("PZSaveManager")
+    app.setApplicationName("ZomboidVault")
+    app.setOrganizationName("ZomboidVault")
 
     window = MainWindow()
     window.show()
