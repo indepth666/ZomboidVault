@@ -4,7 +4,7 @@ Lightweight PySide6 desktop app to back up Project Zomboid saves. It lists world
 
 ## Screenshot
 
-![ZomboidVault Main Window](screenshots/main.png)
+![ZomboidVault Main Window](.github/screenshots/main.png)
 
 ## Platform Support
 
