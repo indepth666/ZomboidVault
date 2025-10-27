@@ -19,3 +19,22 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+## Third-Party Licenses
+
+This project uses the following third-party libraries:
+
+### PySide6
+
+PySide6 is licensed under the GNU Lesser General Public License (LGPL) v3.
+
+- **Project**: PySide6 (Qt for Python)
+- **License**: LGPL v3
+- **Website**: https://www.qt.io/qt-for-python
+- **Source Code**: https://code.qt.io/cgit/pyside/pyside-setup.git/
+
+The LGPL license allows the use of PySide6 in this MIT-licensed project. The full text of the LGPL v3 license can be found at: https://www.gnu.org/licenses/lgpl-3.0.html
+
+PySide6 is dynamically linked as a dependency and is not modified or embedded in this project's source code.
