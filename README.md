@@ -2,10 +2,14 @@
 
 Lightweight PySide6 desktop app to back up Project Zomboid saves. It lists worlds, creates/restores ZIP backups, and runs an optional auto-save timer. The entire app lives in `main.py` + `backup_manager.py` with one dependency (PySide6).
 
-## Usage
+## Installation
 
+### Windows Users
+Download the latest `ZomboidVault-Windows.exe` from the [Releases](https://github.com/indepth666/ZomboidVault/releases) page and run it directly. No installation required!
+
+### From Source
 ```bash
-pip install PySide6
+pip install -r requirements.txt
 python main.py
 ```
 
