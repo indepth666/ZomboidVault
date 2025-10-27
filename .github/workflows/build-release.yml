@@ -4,6 +4,9 @@ on:
   release:
     types: [created]
 
+permissions:
+  contents: write
+
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -27,11 +30,6 @@ jobs:
         pyinstaller --name=ZomboidVault --onefile --windowed --icon=NONE main.py --add-data "style.qss;."
 
     - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./dist/ZomboidVault.exe
-        asset_name: ZomboidVault-Windows.exe
-        asset_content_type: application/octet-stream
+        files: dist/ZomboidVault.exe
