@@ -2,6 +2,10 @@
 
 Lightweight PySide6 desktop app to back up Project Zomboid saves. It lists worlds, creates/restores ZIP backups, and runs an optional auto-save timer. The entire app lives in `main.py` + `backup_manager.py` with one dependency (PySide6).
 
+## Screenshot
+
+![ZomboidVault Main Window](screenshots/main.png)
+
 ## Platform Support
 
 **Developed and tested on Linux.** While the application has been designed with cross-platform compatibility in mind using PySide6 and platform-agnostic code (automatic path detection for Windows, macOS, and Linux), it has only been thoroughly tested on Linux systems.
