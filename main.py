@@ -195,7 +195,7 @@ class MainWindow(QMainWindow):
         self.settings = QSettings("PZSaveManager", "Simple")
         self.backup_manager = None
         self.tray_icon = None
-        self.minimize_to_tray = self.settings.value("minimize_to_tray", True, bool)
+        self.minimize_to_tray = self.settings.value("minimize_to_tray", False, bool)
         self.backup_limit_gb = float(self.settings.value("backup_limit_gb", 5.0, float))
         self.backup_limit_bytes = self.backup_limit_gb * (1024 ** 3)
         self.min_backups_per_world = max(1, self.settings.value("min_backups_per_world", 3, int))
@@ -233,37 +233,47 @@ class MainWindow(QMainWindow):
         toolbar = QToolBar("Main actions")
         toolbar.setMovable(False)
         toolbar.setIconSize(QSize(20, 20))
+        toolbar.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         self.addToolBar(Qt.TopToolBarArea, toolbar)
 
-        self.refresh_action = QAction(QIcon.fromTheme("view-refresh"), "Refresh", self)
-        self.refresh_action.setShortcut("F5")
-        self.refresh_action.triggered.connect(self._load_worlds)
-        toolbar.addAction(self.refresh_action)
-
-        self.new_action = QAction(QIcon.fromTheme("document-save"), "New Backup", self)
+        # Backup management group
+        self.new_action = QAction(QIcon.fromTheme("document-save"), "New", self)
         self.new_action.setShortcut("Ctrl+N")
+        self.new_action.setToolTip("Create new backup (Ctrl+N)")
         self.new_action.triggered.connect(self._create_backup)
         toolbar.addAction(self.new_action)
 
         self.restore_action = QAction(QIcon.fromTheme("document-revert"), "Restore", self)
         self.restore_action.setShortcut("Ctrl+R")
+        self.restore_action.setToolTip("Restore selected backup (Ctrl+R)")
         self.restore_action.triggered.connect(self._restore_backup)
         toolbar.addAction(self.restore_action)
 
         self.delete_action = QAction(QIcon.fromTheme("edit-delete"), "Delete", self)
         self.delete_action.setShortcut("Del")
+        self.delete_action.setToolTip("Delete selected backup (Del)")
         self.delete_action.triggered.connect(self._delete_backup)
         toolbar.addAction(self.delete_action)
 
         toolbar.addSeparator()
 
-        self.explorer_action = QAction(QIcon.fromTheme("folder"), "Open Backups Folder", self)
+        # Navigation group
+        self.refresh_action = QAction(QIcon.fromTheme("view-refresh"), "Refresh", self)
+        self.refresh_action.setShortcut("F5")
+        self.refresh_action.setToolTip("Refresh worlds list (F5)")
+        self.refresh_action.triggered.connect(self._load_worlds)
+        toolbar.addAction(self.refresh_action)
+
+        self.explorer_action = QAction(QIcon.fromTheme("folder"), "Open Folder", self)
+        self.explorer_action.setToolTip("Open backups folder in file manager")
         self.explorer_action.triggered.connect(self._open_backups_directory)
         toolbar.addAction(self.explorer_action)
 
         toolbar.addSeparator()
 
+        # Game control group
         self.launch_game_action = QAction(QIcon.fromTheme("media-playback-start"), "Start Game", self)
+        self.launch_game_action.setToolTip("Launch Project Zomboid via Steam")
         self.launch_game_action.triggered.connect(self._launch_game)
         toolbar.addAction(self.launch_game_action)
 
@@ -337,7 +347,7 @@ class MainWindow(QMainWindow):
         """Open configuration dialog for custom Zomboid path."""
         current_custom = self.settings.value("custom_zomboid_dir", "", str)
         current_path = Path(current_custom).expanduser() if current_custom else self.backup_manager.get_base_dir()
-        minimize_pref = self.settings.value("minimize_to_tray", True, bool)
+        minimize_pref = self.settings.value("minimize_to_tray", False, bool)
 
         autosave_interval = self.settings.value("autosave_interval", 10, int)
 
