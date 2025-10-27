@@ -4,18 +4,26 @@ Lightweight PySide6 desktop app to back up Project Zomboid saves. It lists world
 
 ## Installation
 
-### Windows Users
-Download the latest `ZomboidVault-Windows.exe` from the [Releases](https://github.com/indepth666/ZomboidVault/releases) page and run it directly. No installation required!
+### Linux & macOS
 
-### From Source
 ```bash
+git clone https://github.com/indepth666/ZomboidVault.git
+cd ZomboidVault
 pip install -r requirements.txt
 python main.py
 ```
 
+### Windows
+
+For convenience, a standalone `.exe` is available: download `ZomboidVault-Windows.exe` from the [Releases](https://github.com/indepth666/ZomboidVault/releases) page and run it directly.
+
+Alternatively, use the same method as Linux/macOS above.
+
+## Usage
+
 - Left panel: select a world.
 - Right panel: view backups, metadata, and auto-save settings.
-- Toolbar (or hotkeys) handles refresh, create, restore, delete, and “open folder”.
+- Toolbar (or hotkeys) handles refresh, create, restore, delete, and "open folder".
 
 ## Preferences
 
