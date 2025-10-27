@@ -9,6 +9,7 @@ Features:
 - Simple GUI with PySide6
 """
 import sys
+import subprocess
 from pathlib import Path
 from datetime import datetime
 from typing import Optional
@@ -297,6 +298,12 @@ class MainWindow(QMainWindow):
         self.explorer_action.triggered.connect(self._open_backups_directory)
         toolbar.addAction(self.explorer_action)
 
+        toolbar.addSeparator()
+
+        self.launch_game_action = QAction(QIcon.fromTheme("media-playback-start"), "Start Game", self)
+        self.launch_game_action.triggered.connect(self._launch_game)
+        toolbar.addAction(self.launch_game_action)
+
         self._update_toolbar_state()
 
     def _open_backups_directory(self):
@@ -313,6 +320,27 @@ class MainWindow(QMainWindow):
                 self,
                 "Open folder failed",
                 f"Could not open the backups directory:\n{exc}"
+            )
+
+    def _launch_game(self):
+        """Launch Project Zomboid via Steam."""
+        steam_url = "steam://rungameid/108600"
+        try:
+            if sys.platform.startswith('darwin'):
+                subprocess.Popen(['open', steam_url])
+            elif sys.platform.startswith('win'):
+                subprocess.Popen(['cmd', '/c', 'start', steam_url], shell=True)
+            else:
+                # Linux: try xdg-open first, fallback to steam command
+                try:
+                    subprocess.Popen(['xdg-open', steam_url])
+                except FileNotFoundError:
+                    subprocess.Popen(['steam', steam_url])
+        except Exception as exc:
+            QMessageBox.warning(
+                self,
+                "Launch failed",
+                f"Could not launch Project Zomboid:\n{exc}\n\nMake sure Steam is installed."
             )
 
     def _update_toolbar_state(self):
@@ -1060,4 +1088,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-import subprocess
