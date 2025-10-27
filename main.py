@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
     QListWidget, QListWidgetItem, QPushButton, QLabel, QInputDialog,
     QMessageBox, QSpinBox, QGroupBox, QFormLayout, QSplitter,
     QSystemTrayIcon, QMenu, QDialog, QLineEdit, QFileDialog,
-    QDialogButtonBox, QCheckBox, QDoubleSpinBox, QToolBar
+    QDialogButtonBox, QCheckBox, QDoubleSpinBox, QToolBar, QSizePolicy
 )
 from PySide6.QtCore import Qt, QTimer, QSettings, Signal, QSize
 from PySide6.QtGui import QFont, QIcon, QAction
@@ -41,26 +41,9 @@ class WorldsPanel(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(12)
 
-        header_row = QHBoxLayout()
-        header_row.setSpacing(8)
-
         self.title_label = QLabel("Your Worlds")
         self.title_label.setProperty("class", "header")
-        header_row.addWidget(self.title_label)
-
-        header_row.addStretch()
-
-        self.game_status_label = QLabel("Game Inactive")
-        status_font = QFont()
-        status_font.setPointSize(11)
-        status_font.setBold(True)
-        self.game_status_label.setFont(status_font)
-        self.game_status_label.setStyleSheet(
-            "color: #636e72; padding: 4px 10px; background: #dfe6e9; border-radius: 12px;"
-        )
-        header_row.addWidget(self.game_status_label)
-
-        layout.addLayout(header_row)
+        layout.addWidget(self.title_label)
 
         self.worlds_list = QListWidget()
         self.worlds_list.itemSelectionChanged.connect(self._emit_selection)
@@ -116,26 +99,6 @@ class WorldsPanel(QWidget):
 
         size_mb = size_bytes / (1024 ** 2)
         self.title_label.setText(f"Your Worlds (Backup size: {size_mb:.1f} MB)")
-
-    def set_game_status(self, active_names: set[str]):
-        if active_names:
-            preview = ", ".join(list(active_names)[:2])
-            if len(active_names) > 2:
-                preview += f" +{len(active_names)-2}"
-            text = f"Game Active: {preview}"
-            style = (
-                "color: #0b8f5d; padding: 4px 10px; background: #d4edda; "
-                "border-radius: 12px; font-weight: bold;"
-            )
-        else:
-            text = "Game Inactive"
-            style = (
-                "color: #636e72; padding: 4px 10px; background: #dfe6e9; "
-                "border-radius: 12px; font-weight: bold;"
-            )
-
-        self.game_status_label.setText(text)
-        self.game_status_label.setStyleSheet(style)
 
 
 class BackupsPanel(QWidget):
@@ -303,6 +266,22 @@ class MainWindow(QMainWindow):
         self.launch_game_action = QAction(QIcon.fromTheme("media-playback-start"), "Start Game", self)
         self.launch_game_action.triggered.connect(self._launch_game)
         toolbar.addAction(self.launch_game_action)
+
+        # Add spacer to push game status to the right
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        toolbar.addWidget(spacer)
+
+        # Game status label on the right
+        self.game_status_label = QLabel("Game Inactive")
+        status_font = QFont()
+        status_font.setPointSize(11)
+        status_font.setBold(True)
+        self.game_status_label.setFont(status_font)
+        self.game_status_label.setStyleSheet(
+            "color: #636e72; padding: 4px 10px; background: #dfe6e9; border-radius: 12px;"
+        )
+        toolbar.addWidget(self.game_status_label)
 
         self._update_toolbar_state()
 
@@ -694,7 +673,28 @@ class MainWindow(QMainWindow):
         if self.selected_world:
             self.selected_world['is_active'] = self.selected_world['name'] in active_world_names
 
-        self.worlds_panel.set_game_status(active_world_names)
+        self._set_game_status(active_world_names)
+
+    def _set_game_status(self, active_names: set[str]):
+        """Update game status label in toolbar."""
+        if active_names:
+            preview = ", ".join(list(active_names)[:2])
+            if len(active_names) > 2:
+                preview += f" +{len(active_names)-2}"
+            text = f"Game Active: {preview}"
+            style = (
+                "color: #0b8f5d; padding: 4px 10px; background: #d4edda; "
+                "border-radius: 12px; font-weight: bold;"
+            )
+        else:
+            text = "Game Inactive"
+            style = (
+                "color: #636e72; padding: 4px 10px; background: #dfe6e9; "
+                "border-radius: 12px; font-weight: bold;"
+            )
+
+        self.game_status_label.setText(text)
+        self.game_status_label.setStyleSheet(style)
 
     def _test_autosave(self):
         """Manually trigger auto-save for testing."""

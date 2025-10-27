@@ -88,7 +88,7 @@ class BackupManager:
         Get set of active world names (using file modification time).
 
         A world is considered active if any of its files have been modified
-        in the last 60 seconds. This is fast and cross-platform.
+        in the last 20 seconds. This is fast and cross-platform.
 
         Args:
             worlds: List of world dicts from get_worlds()
@@ -98,7 +98,7 @@ class BackupManager:
         """
         active_worlds = set()
         now = datetime.now().timestamp()
-        threshold = 60  # seconds - consider world active if modified in last minute
+        threshold = 20  # seconds - consider world active if modified in last 20 seconds
 
         for world in worlds:
             world_path = world['path']
@@ -127,7 +127,7 @@ class BackupManager:
         Fast and cross-platform alternative to file locking.
         """
         now = datetime.now().timestamp()
-        threshold = 60  # seconds
+        threshold = 20  # seconds
 
         # Check key files that get updated during gameplay
         key_files = [
